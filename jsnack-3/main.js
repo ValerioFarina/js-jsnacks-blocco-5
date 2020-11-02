@@ -31,7 +31,10 @@ $(document).ready(function() {
 
     // creo una copia dell'array
     var copiedBooks = getCopyOfArray(books);
-    console.log(copiedBooks);
+
+    
+    console.log(getRndLetter());
+
 
 });
 
@@ -41,4 +44,16 @@ $(document).ready(function() {
 // questa funzione prende in input un array e ne restituisce una copia
 function getCopyOfArray(array) {
     return array.slice();
+}
+
+// questa funzione prende in input un min e un max e ritorno un valore casuale compreso tra di essi
+function getRndInteger(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) ) + min;
+}
+
+// questa funzione ritorna una lettera a caso dell'alfabeto
+function getRndLetter() {
+    var alphabet = 'abcdefghijklmnopqrstuvwxyz';
+    var randomNumber = getRndInteger(0, alphabet.length - 1);
+    return alphabet[randomNumber];
 }
