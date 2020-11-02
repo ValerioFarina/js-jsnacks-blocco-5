@@ -29,6 +29,16 @@ $(document).ready(function() {
         }
     ];
 
-
+    // creo una copia dell'array
+    var copiedBooks = getCopyOfArray(books);
+    console.log(copiedBooks);
 
 });
+
+
+// *************** LE MIE FUNZIONI ***************
+
+// questa funzione prende in input un array e ne restituisce una copia
+function getCopyOfArray(array) {
+    return array.slice();
+}
