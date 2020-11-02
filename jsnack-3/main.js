@@ -29,19 +29,10 @@ $(document).ready(function() {
         }
     ];
 
-    // predispongo un array vuoto in cui andrò a salvare una copia dell'array books
-    var clonedBooks = [];
+    // clono l'array books
+    var clonedBooks = clone(books);
 
-    // ciclo sull'array books
-    for (var i = 0; i < books.length; i++) {
-        // per ogni oggetto nell'array books, ne creo una copia e la salvo nell'array copiedBooks
-        // in questo modo, copiedBooks sarà una copia dell'array books
-        // le due copie sono distinte, e quindi modificando l'una non andremo a modificare l'altra
-        var clone = cloneObject(books[i]);
-        clonedBooks.push(clone);
-    }
-
-    // ciclo sull'array copiedBooks
+    // ciclo sull'array clonedBooks
     for (var i = 0; i < clonedBooks.length; i++) {
         // genero una lettera casuale dell'alfabeto
         var randomLetter = getRndLetter();
@@ -49,11 +40,8 @@ $(document).ready(function() {
         clonedBooks[i].position = randomLetter;
     }
 
-
     console.log(clonedBooks);
     console.log(books);
-
-
 
 
 });
@@ -61,20 +49,44 @@ $(document).ready(function() {
 
 // *************** LE MIE FUNZIONI ***************
 
-// questa funzione prende in input un oggetto e ne restituisce una copia
-// la copia è distinta dall'originale: modificando l'una non viene modificata l'altra
-function cloneObject(object) {
-    var clone = {};
-    for (var key in object) {
-        clone[key] = object[key];
+// questa funzione prende come parametro un oggetto o un array e restituisce una sua copia
+// modificando la copia non viene modificato l'originale
+function clone(original) {
+    // creo una variabile in cui andrò a salvare la copia
+    var copy;
+
+    // controllo se l'argomento che è stato passato alla funzione è un array o un oggetto
+    if (Array.isArray(original)) {
+        // se l'originale è un array, anche la copia dovrà essere un array
+        copy = [];
+    } else if (typeof(original) === "object") {
+        // se l'originale è un oggetto, anche la copia dovrà essere un oggetto
+        copy = {};
     }
-    return clone;
+
+    // ciclo sull'array/oggetto originale
+    for (var key in original) {
+        if (!Array.isArray(original[key]) && typeof(original[key]) !== "object") {
+            // se il valore "original[key]" associato alla chiave corrente "key" non è né un array né un oggetto,
+            // mi limito ad inserire dentro la copia che sto creando la coppia chiave-valore "key : original[key]"
+            copy[key] = original[key];
+        } else {
+            // altrimenti, inserisco nella copia che sto creando la chiave "key" e gli associo come valore una copia di "original[key]"
+            // per fare questo, occorre richiamare ricorsivamente la funzione "clone"
+            // in questo modo, nessuna modifica operata (a qualunque livello) sulla copia potrà andare a modificare l'originale
+            copy[key] = clone(original[key]);
+        }
+    }
+
+    return copy;
 }
+
 
 // questa funzione prende in input un min e un max e ritorno un valore casuale compreso tra di essi
 function getRndInteger(min, max) {
   return Math.floor(Math.random() * (max - min + 1) ) + min;
 }
+
 
 // questa funzione ritorna una lettera a caso dell'alfabeto
 function getRndLetter() {
